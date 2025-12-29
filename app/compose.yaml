@@ -39,7 +39,7 @@ services:
     ports:
       - 3000:3000  # <-- Expõe a porta 3000 (padrão do Grafana)
     volumes:
-      - grafana_data:/var/lib/grafana # <-- Salva seus dashboards      
+      - grafana_data:/var/lib/grafana # <-- Salva os dashboards      
 
 volumes:
   db_data:
