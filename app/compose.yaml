@@ -1,0 +1,47 @@
+services:
+  db:
+   build: ./db
+   volumes: 
+     - db_data:/var/lib/mysql 
+
+  web:
+    build: ./web
+    ports:
+     - 80:80
+    volumes:
+    - ./web:/var/www/html
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    container_name: cadvisor
+    privileged: true        
+    ports:
+      -  8081:8080  
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro    
+
+
+  prometheus:
+    image: prom/prometheus:v2.40.1
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus  
+    ports:
+      - 9090:9090 
+
+  grafana:
+    image: grafana/grafana:9.2.3  # <-- Imagem oficial/verificada
+    container_name: grafana
+    ports:
+      - 3000:3000  # <-- Expõe a porta 3000 (padrão do Grafana)
+    volumes:
+      - grafana_data:/var/lib/grafana # <-- Salva seus dashboards      
+
+volumes:
+  db_data:
+  prometheus_data:
+  grafana_data:  
